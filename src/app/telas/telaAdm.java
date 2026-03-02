@@ -1,18 +1,17 @@
-package app;
+package app.telas;
 
 import dao.AdminDao;
 import model.Medico;
 import model.Paciente;
 import model.Usuario;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Scanner;
 import Service.Servicos;
-
-public class mainAdmin {
-    public void exibirAdm(){
+public class telaAdm {
+    public void exibirAdmin() {
         AdminDao dao = new AdminDao();
         Scanner sc = new Scanner(System.in);
         Usuario usuario = new Usuario();
@@ -24,18 +23,17 @@ public class mainAdmin {
         HashMap<Integer, Medico> medicoHashMap = new HashMap<>();
         int opcao;
         do {
-            System.out.println("*****Sistema de Hospital-ADMIN*****");
-            System.out.println("1 - Cadastrar Usuário");
-            System.out.println("2 - Listas do Hospital");
-            System.out.println("3 - Marcar Consulta");
-            System.out.println("4 - Atualizar dados");
-            System.out.println("5 - Remove Usuário");
-            System.out.println("6 - Marcar Consulta");
-            System.out.println("7 - Sair do sistema");
+            System.out.println("1 - Cadastrar usuário");
+            System.out.println("2 - informa o perfil(P/M)");
+            System.out.println("3 - Atualizar dados");
+            System.out.println("4 - Listas do Hospital");
+            System.out.println("5 - Consultas Realizadas");
+            System.out.println("6 - Remove Usuário");
+            System.out.println("7 - Sair do Sistema");
             opcao = sc.nextInt();
             sc.nextLine();
 
-            switch (opcao){
+            switch (opcao) {
                 case 1:
                     System.out.println("****CADASTRAR USUÁRIO****");
                     System.out.println("Informe o nome: ");
@@ -52,56 +50,55 @@ public class mainAdmin {
                     String senha = sc.nextLine();
                     String criptoSenha = servicos.criptografia(senha);
                     usuario.setSenha(senha);
-                    while (true) {
-                        int opcoes = 0;
-                        System.out.println("Escolha o perfil: ");
+
+                    paciente.setNome(criptoName);
+                    paciente.setEmail(criptoEmail);
+                    paciente.setSenha(criptoSenha);
+                    paciente.setPerfil("Paciente");
+                    usuarioHashMap.put(usuario.getId(), paciente);
+                    dao.cadastrarUsuario(usuario);
+                    break;
+                case 2:
+                    System.out.println("****ESCOLHA O PERFIL****");
+                    while (true){
+                        int opcoes;
                         System.out.println("1 - Paciente");
                         System.out.println("2 - Médico");
                         opcoes = sc.nextInt();
                         sc.nextLine();
                         switch (opcoes) {
                             case 1:
-                                System.out.println("Paciente");
                                 usuario.setPerfil("Paciente");
+                                System.out.println("INFORME O ID: ");
+                                int id = sc.nextInt();
+
                                 System.out.println("Informe o CPF: ");
                                 String cpf = sc.nextLine();
                                 paciente.setCpf(cpf);
                                 String criptoCpf = servicos.criptografia(cpf);
-
-                                System.out.println("Informe sua data de nascimento: ");
-                                String dateNascim = sc.nextLine();
-
+                                sc.nextLine();
+                                boolean dataValida = false;
                                 DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                                LocalDate datFormatada = LocalDate.parse(dateNascim, date);
-                                paciente.setData_nascimento(datFormatada);
 
-                                paciente.setNome(criptoName);
-                                paciente.setEmail(criptoEmail);
-                                paciente.setSenha(criptoSenha);
-                                paciente.setPerfil("Paciente");
-                                paciente.setCpf(criptoCpf);
-
-                                dao.cadastrarUsuario(usuario);
-                                dao.cadastrarPaciente(paciente);
-
-                                usuarioHashMap.put(usuario.getId(), paciente);
-                                pacienteHashMap.put(paciente.getIdPaciente(), paciente);
+                                while (!dataValida) {
+                                    System.out.println("Informe sua data de nascimento(dd/mm/yyyy): ");
+                                    String dateNascim = sc.nextLine();
+                                    try {
+                                        LocalDate datFormatada = LocalDate.parse(dateNascim, date);
+                                        paciente.setData_nascimento(datFormatada);
+                                        pacienteHashMap.put(id, paciente);
+                                        dataValida = true;
+                                    } catch (DateTimeParseException e) {
+                                        System.out.println("Erro: Formato de data inválida");
+                                    }
+                                    dao.cadastrarPaciente(id, paciente);
+                                }
                                 break;
                             case 2:
-                                System.out.println("Médico");
-                                System.out.println("Informe a profissão: ");
-                                String profissao = sc.nextLine();
-
-
-                                System.out.println("Informe a especialidade : ");
-                                String especialidade = sc.nextLine();
-                                medicoHashMap.put(medico.getIdMedico(), new Medico());
-
                                 break;
                             default:
-                                System.out.println("Opção Inválida");
+                                System.out.println("Opção inválida!");
                                 break;
-
                         }
                         break;
                     }

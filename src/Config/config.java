@@ -10,7 +10,7 @@ public class config {
     private static String URL;
     private static String USER;
     private static String PASSWORD;
-    private  static  Properties prop = new Properties();;
+    private  static  Properties prop = new Properties();
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

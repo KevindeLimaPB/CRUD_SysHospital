@@ -1,6 +1,6 @@
 package app;
 import Config.config;
-
+import app.telas.telaAdm;
 import java.util.Scanner;
 
 public class Main {
@@ -9,7 +9,7 @@ public class Main {
         //ADMIN_EMAIL=devHospital@gmail.com
         //ADMIN_SENHA=hospital1234
 
-        mainAdmin adm = new mainAdmin();
+        telaAdm adm = new telaAdm();
         Scanner sc = new Scanner(System.in);
         System.out.println("Informe o email: ");
         String email = sc.nextLine();
@@ -18,7 +18,7 @@ public class Main {
 
        if (email.equals(config.getAdmEmail()) && senha.equals(config.getAdmSenha())){
            System.out.println("Entrou");
-                adm.exibirAdm();
+           adm.exibirAdmin();
        }else {
            System.out.println("ERROU");
        }

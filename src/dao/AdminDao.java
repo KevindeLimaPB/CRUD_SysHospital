@@ -6,80 +6,84 @@ import model.Usuario;
 import model.Paciente;
 import model.Medico;
 
+import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
-
-//PARTE EM MANUTENÇÂO
+//PARTE EM MANUTENÇÃO
 public class AdminDao {
-
+    Servicos servicos = new Servicos();
     public void cadastrarUsuario(Usuario usuario){
-        Servicos servicos = new Servicos();
+
         String sql = "INSERT INTO usuario (nome, email, senha, perfil) VALUES (?, ? , ?, ?)";
-        String emailCripto = servicos.criptografia(usuario.getEmail());//criptografia
+
+        String emailCripto = servicos.criptografia(usuario.getEmail()), nomeCripto = servicos.criptografia(usuario.getNome());
+        String senhaCripto = servicos.criptografia(usuario.getSenha()), perfilCripto = servicos.criptografia(usuario.getPerfil());
 
         try(Connection conn = config.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setString(1, usuario.getNome());
+            stmt.setString(1, nomeCripto);
             stmt.setString(2, emailCripto);
-            stmt.setString(3, usuario.getSenha());
-            stmt.setString(4, usuario.getPerfil());
+            stmt.setString(3, senhaCripto);
+            stmt.setString(4, perfilCripto);
             stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()){
-                int idGerado = rs.getInt(1);
-                usuario.setId(idGerado);
-            }
             System.out.println("✅O novo usuário foi adicionado com sucesso");
         }catch (SQLException e){
             System.err.println("❎Erro ao adicionar cliente " + e.getMessage());
         }
     }
 
-    public void cadastrarPaciente(Paciente paciente){
-        //MANUTENÇÂO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        String sqlPacient = "INSERT INTO paciente (id_usuario, cpf, data_nascimento, historico_medico) VALUES (?, ?, ?)";
+    public void cadastrarPaciente(int id_usuario, Paciente paciente) {
 
-        try(Connection conn = config.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlPacient, PreparedStatement.RETURN_GENERATED_KEYS)){
+        //MANUTENÇÂO - ERRO AO INSERIR
+        String sqlPacient = "INSERT INTO paciente (id_usuario, cpf, data_nascimento) VALUES (?, ?, ?);";
+        String perfilUser = "UPDATE usuario SET perfil = ? WHERE id = ?;";
+        Connection conn = null;
 
-            stmt.setInt(1, paciente.getId_usuario());
-            stmt.setString(2, paciente.getCpf());
-            stmt.set(3, paciente.getData_nascimento());
-            stmt.setString(4, "Paciente");
-            stmt.executeUpdate();
-        }catch (SQLException e){
-            System.err.println("❎Erro ao adiciona paciente " + e.getMessage());
+        try {
+            conn = config.getConnection();
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmt = conn.prepareStatement(sqlPacient, PreparedStatement.RETURN_GENERATED_KEYS);
+                 PreparedStatement stmtUser = conn.prepareStatement(perfilUser, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                String cpfCripto = servicos.criptografia(paciente.getCpf());
+                String dateCripto = paciente.getData_nascimento().toString();
+                String criptoDate = servicos.criptografia(dateCripto);
+                stmt.setInt(1, id_usuario);
+                stmt.setString(2, cpfCripto);
+                stmt.setObject(3, criptoDate);//setObject é perfeito para o LocalDate
+                stmt.executeUpdate();
+
+                stmtUser.setString(1, "Paciente");
+                stmtUser.setInt(2, id_usuario);
+                stmtUser.executeUpdate();
+
+                conn.commit();
+            } catch (SQLException e) {
+                if (conn != null) {
+                    try {
+                        conn.rollback();
+                        System.out.println("Sujeia limpa");
+                    }catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void cadastrarMedico(Medico medico){
-        String sqlUsuario = "INSERT INTO usuario(nome, email, senha, perfil) VALUES (?, ?, ?, ?)";
-
+    public void cadastrarMedico(int idMedico, Medico medico){
         String sqlMedico = "INSERT INTO medico(id_medico, profissao, especialidade) VALUES (?, ?, ?)";
-
         try(Connection conn = config.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sqlUsuario, PreparedStatement.RETURN_GENERATED_KEYS)){
-            stmt.setString(1, medico.getNome());
-            stmt.setString(2, medico.getEmail());
-            stmt.setString(3, medico.getSenha());
-            stmt.setString(4, "Médico");
-            stmt.executeUpdate();
-
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()){
-                int idGerado = rs.getInt(1);
-                medico.setIdMedico(idGerado);
-
-                PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico);
-                stmtMedico.setInt(1, idGerado);
-                stmtMedico.setString(2, medico.getProfissao());
-                stmtMedico.setString(3, medico.getEspecialidade());
-                stmtMedico.executeUpdate();
-            }
+        PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico, PreparedStatement.RETURN_GENERATED_KEYS)){
+            stmtMedico.setInt(1, idMedico);
+            stmtMedico.setString(2, medico.getProfissao());
+            stmtMedico.setString(3, medico.getEspecialidade());
+            stmtMedico.executeUpdate();
         }catch (SQLException e){
             System.err.println("❎Erro ao adiciona médico " + e.getMessage());
         }
@@ -134,10 +138,9 @@ public class AdminDao {
 
             while (rs.next()){
                 Paciente p = new Paciente();
-                Timestamp timestamp = rs.getTimestamp("data_nascimento");
                 p.setCpf(rs.getString("cpf"));
-                p.setData_nascimento(LocalDate.from(timestamp.toLocalDateTime()));
-                p.setHistorico(rs.getString("historico"));
+                LocalDate data = rs.getObject("data_nascimento", LocalDate.class);
+                p.setData_nascimento(data);
                 listPacientes.add(p);
             }
         }catch (SQLException e){
@@ -163,7 +166,7 @@ public class AdminDao {
         }
         return medicos;
     }
-
+    //OBSERVAÇÃO
     public List<Consultas> listConsultas(){
         ArrayList<Consultas> consultas = new ArrayList<>();
         String sql = "SELECT c.id, c.data_realizada, c.relatorio," +
@@ -203,8 +206,9 @@ public class AdminDao {
         }
         return consultas;
     }
-
+    //OBSERVAÇÂO
     public void atualizarEmailDoUsuario(Usuario usuario){
+        //OBSERVAÇÂO
         String sql = "UPDATE usuario SET email = ? where id = ?";
         try(Connection conn = config.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -239,49 +243,27 @@ public class AdminDao {
             System.err.println("❎ERRO ao atualizar " + e.getMessage());
         }
     }
-
+    //consertados!
     public void deletarMedico(int id){
         String sqlM = "DELETE FROM medico WHERE id_medico = ?";
-        String sql = "DELETE FROM usuario WHERE id = ?";
-
-        try(Connection conn = config.getConnection()) {
-            conn.setAutoCommit(false);//O java sfd manda o banco para
-            try(PreparedStatement stmt = conn.prepareStatement(sqlM);
-            PreparedStatement statement = conn.prepareStatement(sql)) {
+        try(Connection conn = config.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sqlM)) {
                 stmt.setInt(1, id);
                 stmt.executeUpdate();
-                statement.setInt(1 , id);
-                statement.executeUpdate();
-                conn.commit();
-                System.out.println("Usuario removido");
-            }catch (SQLException e){
-                conn.rollback();
-                System.out.println("ERRO");
-            }
+                System.out.println("Médico removido");
         }catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ERRO");
         }
     }
 
     public void deletarPaciente(int id){
         String sqlP = "DELETE FROM paciente WHERE id_usuario = ?";
-        String sqlU = "DELETE FROM usuario WHERE id = ?";
-        try(Connection conn = config.getConnection()){
-            conn.setAutoCommit(false);
-            try(PreparedStatement stmtP = conn.prepareStatement(sqlP);
-            PreparedStatement stmtU = conn.prepareStatement(sqlU)) {
+        try(Connection conn = config.getConnection();
+            PreparedStatement stmtP = conn.prepareStatement(sqlP)){
                 stmtP.setInt(1, id);
                 stmtP.executeUpdate();
-
-                stmtU.setInt(1, id);
-                stmtU.executeUpdate();
-                conn.commit();
             }catch (SQLException e){
-                conn.rollback();
                 System.out.println("ERRO");
             }
-            }catch (SQLException e){
-            e.printStackTrace();
         }
     }
-}
