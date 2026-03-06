@@ -8,7 +8,14 @@
 
 # Manutenção ⚙
 
-    A parte dao do código ainda está em construção com erros na pasta dao em AdminDao com erro sendo no método  cadastraPaciente.
+    Pasta dao em manutenção com novos códigos e novos métodos ainda em sem teste.
+
+# Atualização 📈
+    
+    1. Novos métodos 
+    2. Novos Serviços 
+    3. Nova verificação de Login 
+    4. Novos códigos dao sendo feito com menos códigos e maior organização
 
 # Autor 👨‍💻
     Kevin de Lima Alves

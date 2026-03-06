@@ -7,22 +7,6 @@ public class Usuario {
     private String senha;
     private String perfil;
 
-    public Usuario(int id, String nome, String email, String senha, String perfil){
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.perfil = perfil;
-    }
-
-    public Usuario( String nome, String email, String senha, String perfil){
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.perfil = perfil;
-    }
-    public  Usuario(){}
-
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
     public String getNome() {return nome;}

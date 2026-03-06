@@ -18,15 +18,6 @@ public class Consultas {
     }
     public Consultas(){}
 
-    public void exibirRelatorio(){
-        System.out.println("Relatorio do medico---> " + "\n" +
-                            "Número da consulta: " + getId() + "\n" +
-                            "nome do médico: " + this.medico.getNome() + "\n" +
-                            "nome do paciente: " + this.paciente.getNome() + "\n" +
-                            "relátorio: " + getRelatorio() + "\n" +
-                            "Data realizada: " + getData_realizada());
-    }
-
     public int getId() {return id;}
 
     public void setId(int id) {
