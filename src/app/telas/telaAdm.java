@@ -1,16 +1,11 @@
 package app.telas;
 
-import dao.*;
-import model.*;
-import java.time.*;
-import java.util.HashMap;
 import Service.*;
+import app.options.*;
+import app.options.secundaryOptions.choiceOptions;
+
 public class telaAdm {
     public void exibirAdmin() {
-
-        HashMap<Integer, Usuario> usuarioHashMap = new HashMap<>();
-        HashMap<Integer, Paciente> pacienteHashMap = new HashMap<>();
-        HashMap<Integer, Medico> medicoHashMap = new HashMap<>();
         int opcao;
 
         do {
@@ -24,7 +19,14 @@ public class telaAdm {
             opcao = ScanEntry.sc.nextInt();
             ScanEntry.sc.nextLine();
 
+            if (opcao == 1) {
+                new primeryOptions().primeiraOpcao();
+            }
 
-        }while (opcao != 7);
+            if (opcao == 2) {
+                new choiceOptions().choice();
+            }
+
+        } while (opcao != 7);
     }
 }

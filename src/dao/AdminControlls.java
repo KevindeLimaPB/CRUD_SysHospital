@@ -2,6 +2,7 @@ package dao;
 
 import model.*;
 import Config.config;
+import Service.CriptoDice;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,9 +19,14 @@ public class AdminControlls {
             conn = config.getConnection();
             stmt = conn.prepareStatement(sql);
 
+                        String
+                    email = new CriptoDice().criptografia(usuario.getEmail()),
+                password = new  CriptoDice().criptografia(usuario.getSenha());
+
+
             stmt.setString(1, usuario.getNome());
-            stmt.setString(2, usuario.getEmail());
-            stmt.setString(3, usuario.getSenha());
+            stmt.setString(2, email);
+            stmt.setString(3, password);
             stmt.setString(4, usuario.getPerfil());
             stmt.execute();
             stmt.close();
@@ -39,7 +45,7 @@ public class AdminControlls {
 
             stmt.setInt(1, paciente.getId_usuario());
             stmt.setString(2, paciente.getCpf());
-            stmt.setObject(3, paciente.getData_nascimento());
+            stmt.setDate(3, java.sql.Date.valueOf(paciente.getData_nascimento()));
             stmt.execute();
             stmt.close();
             System.out.println("✅Paciente criado com sucesso!");
