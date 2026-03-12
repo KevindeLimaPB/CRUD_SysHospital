@@ -6,7 +6,6 @@ public class Medico extends Usuario{
     private int idMedico;
 
     public Medico(String profissao, String especialidade, int idMedico){
-
         this.profissao = profissao;
         this.especialidade = especialidade;
         this.idMedico = idMedico;

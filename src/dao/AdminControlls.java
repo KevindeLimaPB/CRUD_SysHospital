@@ -53,6 +53,23 @@ public class AdminControlls {
         }catch (SQLException e){
             System.err.println("❎Erro ao cadastrar Paciente!");
         }
+    }
 
+    public void cadastrarMedic(Medico medico){
+        String sql = "INSERT INTO medico (id_medico, profissao, especialidade)VALUES (?, ?, ?)";
+
+        try{
+            conn = config.getConnection();
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, medico.getIdMedico());
+            stmt.setString(2, medico.getProfissao());
+            stmt.setString(3, medico.getEspecialidade());
+            stmt.execute();
+            stmt.close();
+            System.out.println("✅Médico criado com sucesso!");
+        }catch (SQLException e){
+            System.out.println("❎Erro ao cadastrar o médico!");
+        }
     }
 }

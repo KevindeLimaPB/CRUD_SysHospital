@@ -2,23 +2,24 @@ package app.options.secundaryOptions.selectedOption;
 
 import Service.ScanEntry;
 import Service.classService.PacientEntry;
+import Service.classService.UserEntry;
 import dao.AdminControlls;
 import app.telas.telaAdm;
-import Service.classService.UserEntry;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import dao.modifications.daoUp;
 public class pacientOption {
 
     public void pacienteCadastro(){
         System.out.println("*****CADASTRO DE PACIENTE*****");
 
-        UserEntry.userEntry.setPerfil("Paciente");
+        String perfil = "Paciente";
+        UserEntry.userEntry.setPerfil(perfil);
 
         System.out.println("Informe o ID: ");
         int id = ScanEntry.sc.nextInt();
         PacientEntry.pacientEntry.setId_usuario(id);
+        UserEntry.userEntry.setId(id);
 
         ScanEntry.sc.nextLine();
         System.out.println("Informe seu CPF: ");
@@ -39,7 +40,7 @@ public class pacientOption {
             System.out.println("Inválido, Tem que ter 11 dígitos!");
         }
 
-
+        new daoUp().atualizarPerfil(UserEntry.userEntry);
         new AdminControlls().cadastrarPacient(PacientEntry.pacientEntry);
         new telaAdm().exibirAdmin();
     }
