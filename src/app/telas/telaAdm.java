@@ -3,19 +3,22 @@ package app.telas;
 import Service.*;
 import app.options.*;
 import app.options.secundaryOptions.choiceOptions;
+import app.options.treeOptions.choiceOptionListy;
 
 public class telaAdm {
     public void exibirAdmin() {
         int opcao;
 
         do {
+
+            System.out.println("------BEM-VINDO ADMIN------");
             System.out.println("1 - Cadastrar usuário");
             System.out.println("2 - informa o perfil(P/M)");
-            System.out.println("3 - Atualizar dados");
-            System.out.println("4 - Listas do Hospital");
-            System.out.println("5 - Consultas Realizadas");
-            System.out.println("6 - Remove Usuário");
-            System.out.println("7 - Sair do Sistema");
+            System.out.println("3 - Listas do Hospital");
+            System.out.println("4 - Remove Usuário");//fazer amanhã
+            System.out.println("5 - Sair do Sistema");
+            System.out.println("---------------------------");
+
             opcao = ScanEntry.sc.nextInt();
             ScanEntry.sc.nextLine();
 
@@ -27,6 +30,10 @@ public class telaAdm {
                 new choiceOptions().choice();
             }
 
-        } while (opcao != 7);
+            if (opcao == 3) {
+                new choiceOptionListy().choiceOption();
+            }
+
+        } while (opcao != 5);
     }
 }

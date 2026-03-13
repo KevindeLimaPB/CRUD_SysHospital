@@ -3,9 +3,7 @@ package dao.modifications;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import Config.config;
-import model.Paciente;
 import model.Usuario;
 
 public class daoUp {
