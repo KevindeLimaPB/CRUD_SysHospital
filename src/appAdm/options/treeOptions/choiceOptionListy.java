@@ -1,8 +1,8 @@
-package app.options.treeOptions;
+package appAdm.options.treeOptions;
 
 import Service.ScanEntry;
-import app.options.treeOptions.ListyOptions.*;
-import app.telas.telaAdm;
+import appAdm.options.treeOptions.ListyOptions.*;
+import appAdm.telas.telaAdm;
 
 public class choiceOptionListy {
     public void choiceOption() {

@@ -1,11 +1,10 @@
-package app.options.secundaryOptions.selectedOption;
+package appAdm.options.secundaryOptions.selectedOption;
 
 import Service.ScanEntry;
 import Service.classService.UserEntry;
 import Service.classService.medicEntry;
-import model.Medico;
 import dao.AdminControlls;
-import app.telas.telaAdm;
+import appAdm.telas.telaAdm;
 import dao.modifications.daoUp;
 public class medicOption {
 

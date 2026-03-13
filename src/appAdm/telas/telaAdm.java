@@ -1,9 +1,10 @@
-package app.telas;
+package appAdm.telas;
 
+import InitMain.Main;
 import Service.*;
-import app.options.*;
-import app.options.secundaryOptions.choiceOptions;
-import app.options.treeOptions.choiceOptionListy;
+import appAdm.options.*;
+import appAdm.options.secundaryOptions.choiceOptions;
+import appAdm.options.treeOptions.choiceOptionListy;
 
 public class telaAdm {
     public void exibirAdmin() {
@@ -34,6 +35,13 @@ public class telaAdm {
                 new choiceOptionListy().choiceOption();
             }
 
+            if (opcao == 4) {
+                new fourOption().removerUser();
+            }
+
+            if (opcao == 5) {
+                new Main();
+            }
         } while (opcao != 5);
     }
 }

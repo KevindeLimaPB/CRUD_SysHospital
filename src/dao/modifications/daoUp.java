@@ -25,4 +25,19 @@ public class daoUp {
             System.err.println("Não foi possível altera o perfil!" + e);
         }
     }
+
+    public void esqueciSenha(Usuario usuario) {
+        String sql = "UPDATE usuario SET senha = ? WHERE id = ?";
+        try {
+            conn = config.getConnection();
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, usuario.getSenha());
+            stmt.setInt(2, usuario.getId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            System.err.println("Não foi possível alterar a senha antiga!" + e);
+        }
+    }
 }

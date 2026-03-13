@@ -1,9 +1,9 @@
-package app.options;
+package appAdm.options;
 
 import Service.ScanEntry;
 import Service.classService.UserEntry;
 import dao.AdminControlls;
-import app.telas.telaAdm;
+import appAdm.telas.telaAdm;
 
 public class primeryOptions {
 

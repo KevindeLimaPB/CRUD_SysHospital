@@ -1,8 +1,8 @@
-package app.options.secundaryOptions;
+package appAdm.options.secundaryOptions;
 //parte onde o admin escolhe ser o usuario será paciente ou médico.
 import Service.ScanEntry;
-import app.options.secundaryOptions.selectedOption.*;
-import app.telas.telaAdm;
+import appAdm.options.secundaryOptions.selectedOption.*;
+import appAdm.telas.telaAdm;
 
 public class choiceOptions {
     public void choice(){

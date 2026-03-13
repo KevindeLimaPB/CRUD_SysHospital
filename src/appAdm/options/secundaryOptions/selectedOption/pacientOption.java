@@ -1,10 +1,10 @@
-package app.options.secundaryOptions.selectedOption;
+package appAdm.options.secundaryOptions.selectedOption;
 
 import Service.ScanEntry;
 import Service.classService.PacientEntry;
 import Service.classService.UserEntry;
 import dao.AdminControlls;
-import app.telas.telaAdm;
+import appAdm.telas.telaAdm;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import dao.modifications.daoUp;
