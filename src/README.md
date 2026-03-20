@@ -8,14 +8,11 @@
 
 # Manutenção ⚙
 
-    Pasta dao em manutenção com novos códigos e novos métodos ainda em sem teste.
+    Pasta appUser em manutenção com as 3 telas entrando agora em desenvolvimento
 
 # Atualização 📈
     
-    1. Novos métodos 
-    2. Novos Serviços 
-    3. Nova verificação de Login 
-    4. Novos códigos dao sendo feito com menos códigos e maior organização
+    1. Atualização feita no método entrada
 
 # Autor 👨‍💻
     Kevin de Lima Alves

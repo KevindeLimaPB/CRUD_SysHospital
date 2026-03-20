@@ -11,6 +11,6 @@ public class Password {
         UserEntry.userEntry.setSenha(senha);
         new daoUp().esqueciSenha(UserEntry.userEntry);
 
-        new maxTentatvs();
+        new entrada();
     }
 }

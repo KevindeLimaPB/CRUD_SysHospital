@@ -40,7 +40,7 @@ public class telaAdm {
             }
 
             if (opcao == 5) {
-                new Main();
+                new Main().inicio();
             }
         } while (opcao != 5);
     }

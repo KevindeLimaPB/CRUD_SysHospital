@@ -2,7 +2,7 @@ package InitMain;
 
 import Logs.Password;
 import Logs.createLog;
-import Logs.maxTentatvs;
+import Logs.entrada;
 import Service.ScanEntry;
 
 public class Main {
@@ -17,7 +17,7 @@ public class Main {
             ScanEntry.sc.nextLine();
 
             if(opcao == 1){
-                new maxTentatvs().tentativsCh();
+                new entrada().entrad();
             }
 
             if (opcao == 2){

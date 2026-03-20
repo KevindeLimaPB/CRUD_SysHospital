@@ -31,20 +31,26 @@ public class UserControlls {
             }
         }
 
-        public String validacaoLog(String email, String senha){
-            String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ? ";
+        public Usuario validacaoLog(String email, String senha){
+            String sql = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
 
             try {
+
                 conn = config.getConnection();
                 stmt = conn.prepareStatement(sql);
 
                 stmt.setString(1, email);
                 stmt.setString(2, senha);
-                try (ResultSet rs = stmt.executeQuery()) {
+
+                ResultSet rs = stmt.executeQuery();
                     if (rs.next()) {
-                        return rs.getString("perfil");
+                        Usuario user = new Usuario();
+                        user.setEmail(rs.getString("email"));
+                        user.setSenha(rs.getString("senha"));
+                        user.setPerfil(rs.getString("perfil"));
+                        return user;
                     }
-                }
+
             }catch (SQLException e){
                 System.out.println("ERRO ao logar");
             }
