@@ -18,7 +18,7 @@ public class medicOption {
         int id = ScanEntry.sc.nextInt();
         medicEntry.medico.setIdMedico(id);
         UserEntry.userEntry.setId(id);
-
+        ScanEntry.sc.nextLine();
         System.out.println("Sua Profissão: ");
         String profissao = ScanEntry.sc.nextLine();
         medicEntry.medico.setProfissao(profissao);

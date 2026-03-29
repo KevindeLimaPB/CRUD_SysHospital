@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class daoSelect {
         }
         return user;
     }
+
 
     public List<Paciente> listaPacient(){
         List<Paciente> pacient = new ArrayList<>();
@@ -82,5 +84,44 @@ public class daoSelect {
             System.err.println("ERRO ao listar médicos!");
         }
         return medico;
+    }
+
+    public void buscarConsulta(Usuario usuario) {
+        // Usei o bloco try-with-resources para fechar a conexão automaticamente
+        String sql = "SELECT p.id, u.nome, p.cpf, c.relatorio, c.data_realizada " +
+                "FROM usuario u " +
+                "INNER JOIN paciente p ON u.id = p.id_usuario " +
+                "INNER JOIN consulta c ON p.id = c.id_patient " +
+                "WHERE u.id = ?";
+
+        try (Connection conn = config.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuario.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--- Histórico de Consultas ---");
+
+            boolean encontrou = false;
+            while (rs.next()) {
+                encontrou = true;
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String cpf = rs.getString("cpf"); // Lembre-se de descriptografar aqui se estiver usando AES!
+                String relatorio = rs.getString("relatorio");
+
+                // Forma converter SQL Date para LocalDate
+                LocalDate data = rs.getDate("data_realizada").toLocalDate();
+
+                System.out.printf("ID: %d | Data: %s | Relatório: %s%n", id, data, relatorio);
+            }
+
+            if (!encontrou) {
+                System.out.println("Nenhuma consulta encontrada para este usuário.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar consultas: " + e.getMessage());
+        }
     }
 }

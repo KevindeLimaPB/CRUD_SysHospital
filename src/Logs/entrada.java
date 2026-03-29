@@ -4,12 +4,12 @@ import Service.ScanEntry;
 import appAdm.telas.*;
 import appUser.Medic.TelaMedic;
 import appUser.Pacient.TelaPacient;
-import dao.UserControlls;
+import dao.daoControlls;
 import appUser.User.TelaUser;
 import model.Usuario;
 
 public class entrada {
-    UserControlls user = new UserControlls();
+    daoControlls user = new daoControlls();
 
     public void entrad(){
         //ADMIN_EMAIL=devHospital@gmail.com
@@ -37,13 +37,13 @@ public class entrada {
 
                 if (u.getPerfil().equalsIgnoreCase("user")){
                     System.out.println("Entrando na tela Usuário");
-                    new TelaUser().d();
+                    new TelaUser().exibirUser();
                 }
 
                 if (u.getPerfil().equalsIgnoreCase("paciente")){
                     System.out.println("Entrando na tela Paciente");
 
-                    new TelaPacient().c();
+                    new TelaPacient().TelaPaciente();
                 }
 
                 if (u.getPerfil().equalsIgnoreCase("Médico")){

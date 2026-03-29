@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import Config.config;
+import model.Paciente;
 import model.Usuario;
 
 public class daoUp {
@@ -22,7 +23,7 @@ public class daoUp {
             stmt.executeUpdate();
             stmt.close();
         }catch (SQLException e){
-            System.err.println("Não foi possível altera o perfil!" + e);
+            System.err.println("Não foi possível altera o perfil!" + e.getMessage());
         }
     }
 
@@ -37,7 +38,41 @@ public class daoUp {
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
-            System.err.println("Não foi possível alterar a senha antiga!" + e);
+            System.err.println("Não foi possível alterar a senha antiga!" + e.getMessage());
         }
     }
+
+    public void alteraEmail(Usuario usuario){
+        String sql = "UPDATE usuario SET email = ? WHERE id = ?";
+
+        try{
+            conn = config.getConnection();
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, usuario.getEmail());
+            stmt.setInt(2, usuario.getId());
+
+            stmt.execute();
+            stmt.close();
+        }catch (SQLException e){
+            System.err.println("ERRO ao alterar email" + e.getMessage());
+        }
+
+    }
+    public void pacient(Paciente paciente){
+        String sql = "UPDATE paciente SET cpf = ? WHERE id = ?";
+
+        try{
+            conn = config.getConnection();
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, paciente.getCpf());
+            stmt.setInt(2, paciente.getId());
+            stmt.execute();
+            stmt.close();
+        }catch (SQLException e){
+            System.err.println("ERRO ao alterar cpf " + e.getMessage());
+        }
+    }
+
 }

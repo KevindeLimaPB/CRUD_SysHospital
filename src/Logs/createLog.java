@@ -2,7 +2,7 @@ package Logs;
 
 import Service.ScanEntry;
 import Service.classService.UserEntry;
-import dao.UserControlls;
+import dao.daoControlls;
 
 public class createLog {
     public void criarLog(){
@@ -25,7 +25,7 @@ public class createLog {
 
         if (senha.equals(validar_senha)){
             UserEntry.userEntry.setPerfil("User");
-            new UserControlls().criandoConta(UserEntry.userEntry);
+            new daoControlls().criandoConta(UserEntry.userEntry);
         }else {
             System.out.println("Senha errada!");
         }

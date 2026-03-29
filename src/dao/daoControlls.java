@@ -2,13 +2,15 @@ package dao;
 
 import Config.config;
 import Service.CriptoDice;
+import model.Consultas;
 import model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserControlls {
+
+public class daoControlls {
         Connection conn;
         PreparedStatement stmt;
         public void criandoConta(Usuario usuario) {
@@ -52,8 +54,25 @@ public class UserControlls {
                     }
 
             }catch (SQLException e){
-                System.out.println("ERRO ao logar");
+                System.out.println("ERRO ao logar " + e.getMessage());
             }
             return null;
+        }
+
+        public void consultasRealizadas(Consultas consultas){
+            String sql = "INSERT INTO consulta(id_doctor, id_patient, data_realizada, relatorio)VALUES(?,?,?,?)";
+            try {
+                conn = config.getConnection();
+                stmt = conn.prepareStatement(sql);
+
+                stmt.setInt(1, consultas.getMedico());
+                stmt.setInt(2, consultas.getPaciente());
+                stmt.setDate(3, java.sql.Date.valueOf(consultas.getData_realizada()));
+                stmt.setString(4,consultas.getRelatorio());
+                stmt.execute();
+                stmt.close();
+            }catch (SQLException e){
+                System.out.println("ERRO ao coloca consulta " + e.getMessage());
+            }
         }
     }
